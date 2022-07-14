@@ -1,6 +1,7 @@
 import { PackageJson } from "type-fest";
 import fs from "fs";
 import { PackageManager } from "../utils/getUserPkgManager";
+
 export const availableNextPackages = [
   "nextAuth",
   "prisma",
@@ -8,7 +9,7 @@ export const availableNextPackages = [
   "trpc",
 ] as const;
 
-export const availabelNextPackagesTemp = [
+export const availableNextPackagesTemp = [
   "prisma",
   "tailwind",
   "trpc",
@@ -22,18 +23,18 @@ type XOR<T, U> = T | U extends Object
   : T | U;
 
 export type AvailableNextPackages = typeof availableNextPackages[number];
-export type AvailabeNodePackages = typeof availableNodePackages[number];
+export type AvailableNodePackages = typeof availableNodePackages[number];
 
 export type AvailableNextPackagesTemp =
-  typeof availabelNextPackagesTemp[number];
+  typeof availableNextPackagesTemp[number];
 
 export type AvailablePackages = XOR<
   AvailableNextPackages,
-  AvailabeNodePackages
+  AvailableNodePackages
 >;
-export type AvailabePackageTemp = XOR<
+export type AvailablePackageTemp = XOR<
   AvailableNextPackagesTemp,
-  AvailabeNodePackages
+  AvailableNodePackages
 >;
 
 export type AvailablePackages18 = XOR<
@@ -46,7 +47,7 @@ export interface InstallerOptions {
   pkgManager: PackageManager;
   noInstall: boolean;
   packages?: PkgInstallerMap;
-  projectNmae?: string;
+  projectName?: string;
 }
 
 export type Installer = (opts: InstallerOptions) => Promise<void>;
@@ -58,18 +59,21 @@ export type PkgInstallerMap = {
   };
 };
 
-const getInstallersDir = fs.readdirSync(__dirname);
-const getInstallers = getInstallersDir.map((elem) => elem.replace(/\.ts$/, ""));
+const installerFiles = fs.readdirSync(__dirname);
+const installerPackages = installerFiles.map((elem) => {
+  const packageName = elem.split("iI");
+  return packageName[0];
+});
 
 export const buildPkgInstallerMap = (
   packages: AvailablePackages18[]
 ): PkgInstallerMap => {
-  let packageMap: PkgInstallerMap;
+  let packageMap: PkgInstallerMap = {};
   for (let i = 0; i < packages.length; i++) {
-    // assign new key to object packageMap
-    // asign bool to inUse
-    if (getInstallers.includes(packages[0])) {
-      // asign installer module if exist
+    packageMap[packages[i]] = { inUse: true};
+    packageMap[packages[i]]= { installer: undefined};
+    if (installerPackages.includes(packages[i])) {
+      packageMap[packages[i]].installer = `${packages[i]}Installer`;
     }
   }
   return packageMap;

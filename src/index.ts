@@ -21,4 +21,13 @@ const main = async () => {
   } = await runCli();
 
   const usePackages = buildPkgInstallerMap(packages);
+
+  // e.g. dir/@mono/app returns ["@mono/app", "dir/app"]
+  const [scopedAppName, appDir] = parseNameAndPath(appName);
+
+  const projectDir = await createProject({
+    projectName: appDir,
+    packages: usePackages,
+    noInstall,
+  });
 };

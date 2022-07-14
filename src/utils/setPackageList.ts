@@ -1,13 +1,13 @@
 import {
   AvailableNextPackages,
-  AvailabeNodePackages,
+  AvailableNodePackages,
   AvailablePackages,
   AvailablePackages18,
   AvailableNextPackagesTemp,
 } from "../installers";
 
 export const setPackageList = (projectType: string): AvailablePackages18[] => {
-  let nodePackages: AvailabeNodePackages[];
+  let nodePackages: AvailableNodePackages[];
   if ((projectType = "node")) {
     nodePackages = ["dotenv", "cors", "trpc"];
     return nodePackages;

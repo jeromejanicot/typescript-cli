@@ -28,7 +28,7 @@ const defaultOptions: CliResults = {
   flags: {
     noGit: false,
     noInstall: false,
-    default: false,
+    default: false
   },
 };
 
